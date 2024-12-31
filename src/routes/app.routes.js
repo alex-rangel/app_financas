@@ -12,6 +12,11 @@ function AppRoutes() {
       screenOptions={
         {
           headerShown: false,
+          
+          drawerItemStyle: {
+            marginBottom: 10,
+          },
+
           drawerStyle: {
             backgroundColor: '#fff',
             paddingTop: 20,
