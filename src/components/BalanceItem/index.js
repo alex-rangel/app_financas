@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 
 import { Container, Label, Balance } from "./styles";
+import formatCurrency from "../../utils/formatCurrency";
 
 const BalanceItem = ({ data }) => {
 
@@ -26,7 +27,7 @@ const BalanceItem = ({ data }) => {
     return (
         <Container bg={labelName.color}>
             <Label>{data.tag}</Label>
-            <Balance>R$ {data.saldo}</Balance>
+            <Balance>{formatCurrency(data.saldo)}</Balance>
         </Container>
     );
 }

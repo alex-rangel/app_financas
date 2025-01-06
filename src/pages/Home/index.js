@@ -1,27 +1,43 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 
-import { Background, ListBalance } from "./styles";
+import {
+    Background,
+    ListBalance,
+    Area,
+    Title,
+    List
+} from "./styles";
 
 import { useIsFocused } from "@react-navigation/native";
 
-import { AuthContext } from "../../contexts/auth";
+import { TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+
 import Userapi from "../../services/user";
 import Header from "../../components/Header";
 import BalanceItem from "../../components/BalanceItem";
+import HistoricoList from "../../components/HistoricList";
 
 const Home = () => {
 
-    const [ listBalance, setListBalance ] = useState([]);
+    const [listBalance, setListBalance] = useState([]);
     const [dateMovement, setDateMovement] = useState(new Date());
+    const [moviments, setMoviments] = useState([]);
     const isFocused = useIsFocused();
 
     useEffect(() => {
         let isActive = true;
-    
+
         async function getMovements() {
             let dateFormatted = format(dateMovement, 'dd/MM/yyyy');
-            
+
+            const receives = await Userapi.get('/receives', {
+                params: {
+                    date: dateFormatted
+                }
+            });
+
             const balance = await Userapi.get('/balance', {
                 params: {
                     date: dateFormatted
@@ -29,6 +45,8 @@ const Home = () => {
             })
 
             if (isActive) {
+
+                setMoviments(receives.data);
                 setListBalance(balance.data);
             }
         }
@@ -49,8 +67,23 @@ const Home = () => {
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={item => item.tag}
                 renderItem={({ item }) => (
-                <BalanceItem data={item} />
+                    <BalanceItem data={item} />
                 )}
+            />
+
+            <Area>
+                <TouchableOpacity>
+                    <Icon name="event" size={30} color="#121212" />
+                </TouchableOpacity>
+                <Title>Ultimas movimentações</Title>
+            </Area>
+
+            <List
+                showsVerticalScrollIndicator={false}
+                data={moviments}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => <HistoricoList data={item} />
+                }
             />
 
         </Background>
