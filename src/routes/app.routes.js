@@ -5,10 +5,13 @@ const Drawer = createDrawerNavigator();
 
 import Home from '../pages/Home';
 import New from '../components/New';
+import Profile from '../pages/Profile';
+import CustomDrawer from '../components/CustomDrawer';
 
 function AppRoutes() {
   return (
     <Drawer.Navigator
+      drawerContent={ (props) => <CustomDrawer {...props}/>}
       screenOptions={
         {
           headerShown: false,
@@ -32,6 +35,7 @@ function AppRoutes() {
     >
       <Drawer.Screen name="Home" component={Home}/>
       <Drawer.Screen name="Registro" component={New} />
+      <Drawer.Screen name="Perfil" component={Profile} />
     </Drawer.Navigator>
   );
 }
